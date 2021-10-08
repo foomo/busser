@@ -1,0 +1,24 @@
+modulekind: commonjs
+tsclientflavor: async
+
+module:
+  name: github.com/foomo/busser
+  path: ./
+
+targets:
+  service:
+    services:
+      /services/busser: Service
+    package: github.com/foomo/busser/service
+    out: ./client-ts/src/client-service.ts
+    tsrpc:
+      - Service
+
+
+mappings:
+  github.com/foomo/busser/table:
+    out: ./client-ts/src/vo-table.ts
+  github.com/foomo/busser/table/validation:
+    out: ./client-ts/src/vo-validation.ts
+  github.com/foomo/busser/service:
+    out: ./client-ts/src/vo-service.ts
