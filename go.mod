@@ -3,7 +3,7 @@ module github.com/foomo/busser
 go 1.17
 
 require (
-	github.com/davecgh/go-spew v1.1.1
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/foomo/gotsrpc/v2 v2.0.9
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -13,8 +13,9 @@ require (
 
 )
 
+require github.com/hashicorp/go-uuid v1.0.2
+
 require (
-	github.com/hashicorp/go-uuid v1.0.2 // indirect
 	github.com/iancoleman/strcase v0.1.3 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
 	go.uber.org/atomic v1.7.0 // indirect

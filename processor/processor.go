@@ -56,17 +56,23 @@ func Process(t *table.Table, p Processor) (vt *validation.Table, err error) {
 	}
 	for i, row := range t.Rows {
 		rv := vt.Rows[i]
-		rv.Valid = rv.CellsAreValid()
-		if rv.Valid {
-			valid, err := p.Row(
-				c.Collect,
-				row,
-			)
-			if err != nil {
-				return nil, err
-			}
-			rv.Valid = valid
+		// do validation on row
+		valid, err := p.Row(
+			c.Collect,
+			row,
+		)
+		if err != nil {
+			return nil, err
 		}
+		rv.Valid = valid
+
+		// if the row validations are valid check if
+		// the cell validations are valid as well and
+		// propagate the validation state
+		if rv.Valid {
+			rv.Valid = rv.CellsAreValid()
+		}
+
 		rv.Feedback = c.Flush()
 	}
 	c.Feedback = nil
