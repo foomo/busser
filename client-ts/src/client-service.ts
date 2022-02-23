@@ -9,29 +9,29 @@ export class ServiceClient {
 	constructor(
 		public transport:<T>(method: string, data?: any[]) => Promise<T>
 	) {}
-	async commit(id:github_com_foomo_busser_table.ID, version:github_com_foomo_busser_table.Version):Promise<github_com_foomo_busser_service.ErrorCommit> {
-		return (await this.transport<{0:github_com_foomo_busser_service.ErrorCommit}>("Commit", [id, version]))[0]
+	async commit(id:github_com_foomo_busser_table.ID, version:github_com_foomo_busser_table.Version):Promise<github_com_foomo_busser_service.ErrorCommit|null> {
+		return (await this.transport<{0:github_com_foomo_busser_service.ErrorCommit|null}>("Commit", [id, version]))[0]
 	}
-	async delete(id:github_com_foomo_busser_table.ID, versions:github_com_foomo_busser_table.Version[]):Promise<github_com_foomo_busser_service.ErrorDelete> {
-		return (await this.transport<{0:github_com_foomo_busser_service.ErrorDelete}>("Delete", [id, versions]))[0]
+	async delete(id:github_com_foomo_busser_table.ID, versions:Array<github_com_foomo_busser_table.Version>|null|null):Promise<github_com_foomo_busser_service.ErrorDelete|null> {
+		return (await this.transport<{0:github_com_foomo_busser_service.ErrorDelete|null}>("Delete", [id, versions]))[0]
 	}
-	async getCommitted(id:github_com_foomo_busser_table.ID):Promise<{t:github_com_foomo_busser_table.Table; vt:github_com_foomo_busser_table_validation.Table; err:github_com_foomo_busser_service.ErrorGet}> {
-		let response = await this.transport<{0:github_com_foomo_busser_table.Table; 1:github_com_foomo_busser_table_validation.Table; 2:github_com_foomo_busser_service.ErrorGet}>("GetCommitted", [id])
+	async getCommitted(id:github_com_foomo_busser_table.ID):Promise<{t:github_com_foomo_busser_table.Table|null; vt:github_com_foomo_busser_table_validation.Table|null; err:github_com_foomo_busser_service.ErrorGet|null}> {
+		let response = await this.transport<{0:github_com_foomo_busser_table.Table|null; 1:github_com_foomo_busser_table_validation.Table|null; 2:github_com_foomo_busser_service.ErrorGet|null}>("GetCommitted", [id])
 		let responseObject = {t : response[0], vt : response[1], err : response[2]};
 		return responseObject;
 	}
-	async getVersion(id:github_com_foomo_busser_table.ID, version:github_com_foomo_busser_table.Version):Promise<{t:github_com_foomo_busser_table.Table; vt:github_com_foomo_busser_table_validation.Table; err:github_com_foomo_busser_service.ErrorGet}> {
-		let response = await this.transport<{0:github_com_foomo_busser_table.Table; 1:github_com_foomo_busser_table_validation.Table; 2:github_com_foomo_busser_service.ErrorGet}>("GetVersion", [id, version])
+	async getVersion(id:github_com_foomo_busser_table.ID, version:github_com_foomo_busser_table.Version):Promise<{t:github_com_foomo_busser_table.Table|null; vt:github_com_foomo_busser_table_validation.Table|null; err:github_com_foomo_busser_service.ErrorGet|null}> {
+		let response = await this.transport<{0:github_com_foomo_busser_table.Table|null; 1:github_com_foomo_busser_table_validation.Table|null; 2:github_com_foomo_busser_service.ErrorGet|null}>("GetVersion", [id, version])
 		let responseObject = {t : response[0], vt : response[1], err : response[2]};
 		return responseObject;
 	}
-	async list():Promise<{ret:github_com_foomo_busser_table.Map; ret_1:github_com_foomo_busser_service.ErrorGet}> {
-		let response = await this.transport<{0:github_com_foomo_busser_table.Map; 1:github_com_foomo_busser_service.ErrorGet}>("List", [])
+	async list():Promise<{ret:github_com_foomo_busser_table.Map; ret_1:github_com_foomo_busser_service.ErrorGet|null}> {
+		let response = await this.transport<{0:github_com_foomo_busser_table.Map; 1:github_com_foomo_busser_service.ErrorGet|null}>("List", [])
 		let responseObject = {ret : response[0], ret_1 : response[1]};
 		return responseObject;
 	}
-	async validate(id:github_com_foomo_busser_table.ID):Promise<{t:github_com_foomo_busser_table.Table; vt:github_com_foomo_busser_table_validation.Table; err:github_com_foomo_busser_service.ErrorValidation}> {
-		let response = await this.transport<{0:github_com_foomo_busser_table.Table; 1:github_com_foomo_busser_table_validation.Table; 2:github_com_foomo_busser_service.ErrorValidation}>("Validate", [id])
+	async validate(id:github_com_foomo_busser_table.ID):Promise<{t:github_com_foomo_busser_table.Table|null; vt:github_com_foomo_busser_table_validation.Table|null; err:github_com_foomo_busser_service.ErrorValidation|null}> {
+		let response = await this.transport<{0:github_com_foomo_busser_table.Table|null; 1:github_com_foomo_busser_table_validation.Table|null; 2:github_com_foomo_busser_service.ErrorValidation|null}>("Validate", [id])
 		let responseObject = {t : response[0], vt : response[1], err : response[2]};
 		return responseObject;
 	}

@@ -18,14 +18,14 @@ type FeedbackEntry struct {
 type Feedback []FeedbackEntry
 
 type Cell struct {
-	Valid    bool `json:"valid"`
-	Feedback `json:"feedback"`
+	Valid    bool     `json:"valid"`
+	Feedback Feedback `json:"feedback"`
 }
 
 type Row struct {
 	Valid    bool                      `json:"valid"`
 	Cells    map[table.ColumnName]Cell `json:"cells"`
-	Feedback `json:"feedback"`
+	Feedback Feedback                  `json:"feedback"`
 }
 
 func (r *Row) AddFeedback(level FeedbackLevel, msg string) {
@@ -44,9 +44,9 @@ func (r Row) CellsAreValid() bool {
 type Rows []*Row
 
 type Table struct {
-	Valid    bool `json:"valid"`
-	Rows     Rows `json:"rows"`
-	Feedback `json:"feedback"`
+	Valid    bool     `json:"valid"`
+	Rows     Rows     `json:"rows"`
+	Feedback Feedback `json:"feedback"`
 }
 
 type Collector func(level FeedbackLevel, msg string)

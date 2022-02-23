@@ -6,15 +6,29 @@ import * as github_com_foomo_busser_table_validation from './vo-validation'; // 
 // github.com/foomo/busser/table/validation.Cell
 export interface Cell {
 	valid:boolean;
+	feedback:github_com_foomo_busser_table_validation.FeedbackEntry[];
+}
+// github.com/foomo/busser/table/validation.FeedbackEntry
+export interface FeedbackEntry {
+	level:github_com_foomo_busser_table_validation.FeedbackLevel;
+	msg:string;
+}
+// github.com/foomo/busser/table/validation.FeedbackLevel
+export enum FeedbackLevel {
+	Error = "error",
+	Valid = "valid",
+	Warning = "warning",
 }
 // github.com/foomo/busser/table/validation.Row
 export interface Row {
 	valid:boolean;
-	cells:Record<github_com_foomo_busser_table.ColumnName,github_com_foomo_busser_table_validation.Cell>;
+	cells:Record<github_com_foomo_busser_table.ColumnName,github_com_foomo_busser_table_validation.Cell>|null;
+	feedback:github_com_foomo_busser_table_validation.FeedbackEntry[];
 }
 // github.com/foomo/busser/table/validation.Table
 export interface Table {
 	valid:boolean;
 	rows:github_com_foomo_busser_table_validation.Row[];
+	feedback:github_com_foomo_busser_table_validation.FeedbackEntry[];
 }
 // end of common js

@@ -17,7 +17,7 @@ export interface Table {
 	version:github_com_foomo_busser_table.Version;
 	timestamp:number;
 	rows:github_com_foomo_busser_table.Row[];
-	readErrors:string[];
+	readErrors:Array<string>|null;
 }
 // github.com/foomo/busser/table.TableSummary
 export interface TableSummary {
