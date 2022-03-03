@@ -80,6 +80,13 @@ func Process(t *table.Table, p Processor) (vt *validation.Table, err error) {
 		vt,
 		t,
 	)
+
+	// if the table validations are valid check if
+	// the row validations are valid as well and
+	// propagate the validation state
+	if valid {
+		valid = vt.RowsAreValid()
+	}
 	vt.Valid = valid
 	vt.Feedback = c.Flush()
 	return vt, err

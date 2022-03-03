@@ -49,6 +49,15 @@ type Table struct {
 	Feedback Feedback `json:"feedback"`
 }
 
+func (t Table) RowsAreValid() bool {
+	for _, r := range t.Rows {
+		if !r.Valid {
+			return false
+		}
+	}
+	return true
+}
+
 type Collector func(level FeedbackLevel, msg string)
 
 type Container struct {
