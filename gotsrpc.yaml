@@ -1,9 +1,6 @@
-modulekind: commonjs
-tsclientflavor: async
-
 module:
   name: github.com/foomo/busser
-  path: ./
+  path: .
 
 targets:
   service:
@@ -13,7 +10,6 @@ targets:
     out: ./client-ts/src/client-service.ts
     tsrpc:
       - Service
-
 
 mappings:
   github.com/foomo/busser/table:

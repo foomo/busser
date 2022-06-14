@@ -27,10 +27,7 @@ type ServiceGoTSRPCProxy struct {
 }
 
 func NewDefaultServiceGoTSRPCProxy(service Service) *ServiceGoTSRPCProxy {
-	return &ServiceGoTSRPCProxy{
-		EndPoint: "/services/busser",
-		service:  service,
-	}
+	return NewServiceGoTSRPCProxy(service, "/services/busser")
 }
 
 func NewServiceGoTSRPCProxy(service Service, endpoint string) *ServiceGoTSRPCProxy {
@@ -42,121 +39,155 @@ func NewServiceGoTSRPCProxy(service Service, endpoint string) *ServiceGoTSRPCPro
 
 // ServeHTTP exposes your service
 func (p *ServiceGoTSRPCProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		if r.Method == http.MethodOptions {
-			return
-		}
+	if r.Method == http.MethodOptions {
+		return
+	} else if r.Method != http.MethodPost {
 		gotsrpc.ErrorMethodNotAllowed(w)
 		return
 	}
 	defer io.Copy(ioutil.Discard, r.Body) // Drain Request Body
 
 	funcName := gotsrpc.GetCalledFunc(r, p.EndPoint)
-	callStats := gotsrpc.GetStatsForRequest(r)
-	if callStats != nil {
-		callStats.Func = funcName
-		callStats.Package = "github.com/foomo/busser/service"
-		callStats.Service = "Service"
-	}
+	callStats, _ := gotsrpc.GetStatsForRequest(r)
+	callStats.Func = funcName
+	callStats.Package = "github.com/foomo/busser/service"
+	callStats.Service = "Service"
 	switch funcName {
 	case ServiceGoTSRPCProxyCommit:
+		var (
+			args []interface{}
+			rets []interface{}
+		)
 		var (
 			arg_id      github_com_foomo_busser_table.ID
 			arg_version github_com_foomo_busser_table.Version
 		)
-		args := []interface{}{&arg_id, &arg_version}
-		err := gotsrpc.LoadArgs(&args, callStats, r)
-		if err != nil {
+		args = []interface{}{&arg_id, &arg_version}
+		if err := gotsrpc.LoadArgs(&args, callStats, r); err != nil {
 			gotsrpc.ErrorCouldNotLoadArgs(w)
 			return
 		}
 		executionStart := time.Now()
 		commitRet := p.service.Commit(arg_id, arg_version)
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{commitRet}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{commitRet}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	case ServiceGoTSRPCProxyDelete:
+		var (
+			args []interface{}
+			rets []interface{}
+		)
 		var (
 			arg_id       github_com_foomo_busser_table.ID
 			arg_versions []github_com_foomo_busser_table.Version
 		)
-		args := []interface{}{&arg_id, &arg_versions}
-		err := gotsrpc.LoadArgs(&args, callStats, r)
-		if err != nil {
+		args = []interface{}{&arg_id, &arg_versions}
+		if err := gotsrpc.LoadArgs(&args, callStats, r); err != nil {
 			gotsrpc.ErrorCouldNotLoadArgs(w)
 			return
 		}
 		executionStart := time.Now()
 		deleteErr := p.service.Delete(arg_id, arg_versions)
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{deleteErr}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{deleteErr}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	case ServiceGoTSRPCProxyGetCommitted:
 		var (
+			args []interface{}
+			rets []interface{}
+		)
+		var (
 			arg_id github_com_foomo_busser_table.ID
 		)
-		args := []interface{}{&arg_id}
-		err := gotsrpc.LoadArgs(&args, callStats, r)
-		if err != nil {
+		args = []interface{}{&arg_id}
+		if err := gotsrpc.LoadArgs(&args, callStats, r); err != nil {
 			gotsrpc.ErrorCouldNotLoadArgs(w)
 			return
 		}
 		executionStart := time.Now()
 		getCommittedT, getCommittedVt, getCommittedErr := p.service.GetCommitted(arg_id)
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{getCommittedT, getCommittedVt, getCommittedErr}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{getCommittedT, getCommittedVt, getCommittedErr}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	case ServiceGoTSRPCProxyGetVersion:
+		var (
+			args []interface{}
+			rets []interface{}
+		)
 		var (
 			arg_id      github_com_foomo_busser_table.ID
 			arg_version github_com_foomo_busser_table.Version
 		)
-		args := []interface{}{&arg_id, &arg_version}
-		err := gotsrpc.LoadArgs(&args, callStats, r)
-		if err != nil {
+		args = []interface{}{&arg_id, &arg_version}
+		if err := gotsrpc.LoadArgs(&args, callStats, r); err != nil {
 			gotsrpc.ErrorCouldNotLoadArgs(w)
 			return
 		}
 		executionStart := time.Now()
 		getVersionT, getVersionVt, getVersionErr := p.service.GetVersion(arg_id, arg_version)
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{getVersionT, getVersionVt, getVersionErr}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{getVersionT, getVersionVt, getVersionErr}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	case ServiceGoTSRPCProxyList:
+		var (
+			args []interface{}
+			rets []interface{}
+		)
 		executionStart := time.Now()
 		listRet, listRet_1 := p.service.List()
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{listRet, listRet_1}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{listRet, listRet_1}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	case ServiceGoTSRPCProxyValidate:
 		var (
+			args []interface{}
+			rets []interface{}
+		)
+		var (
 			arg_id github_com_foomo_busser_table.ID
 		)
-		args := []interface{}{&arg_id}
-		err := gotsrpc.LoadArgs(&args, callStats, r)
-		if err != nil {
+		args = []interface{}{&arg_id}
+		if err := gotsrpc.LoadArgs(&args, callStats, r); err != nil {
 			gotsrpc.ErrorCouldNotLoadArgs(w)
 			return
 		}
 		executionStart := time.Now()
 		validateT, validateVt, validateErr := p.service.Validate(arg_id)
-		if callStats != nil {
-			callStats.Execution = time.Now().Sub(executionStart)
+		callStats.Execution = time.Since(executionStart)
+		rets = []interface{}{validateT, validateVt, validateErr}
+		if err := gotsrpc.Reply(rets, callStats, r, w); err != nil {
+			gotsrpc.ErrorCouldNotReply(w)
+			return
 		}
-		gotsrpc.Reply([]interface{}{validateT, validateVt, validateErr}, callStats, r, w)
+		gotsrpc.Monitor(w, r, args, rets, callStats)
 		return
 	default:
 		gotsrpc.ClearStats(r)
-		http.Error(w, "404 - not found "+r.URL.Path, http.StatusNotFound)
+		gotsrpc.ErrorFuncNotFound(w)
 	}
 }
