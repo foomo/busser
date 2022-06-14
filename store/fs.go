@@ -144,7 +144,7 @@ func (fs *fs) Delete(id table.ID, version table.Version) error {
 	if err != nil {
 		return err
 	}
-	if committedVersion != "" {
+	if committedVersion != "" && version == committedVersion {
 		err := os.Remove(fs.getCommitFileName(id))
 		if err != nil {
 			return err
