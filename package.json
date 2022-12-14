@@ -1,0 +1,27 @@
+{
+  "name": "@foomo/busser",
+  "author": "foomo",
+  "license": "MIT",
+  "version": "0.2.4",
+  "description": "A program that runs on your server to validate and store table data",
+  "keywords": [],
+  "homepage": "https://github.com/foomo/busser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foomo/busser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/foomo/busser/issues"
+  },
+  "main": "client-ts/dist/index.js",
+  "types": "client-ts/dist/index.d.ts",
+  "files": [
+    "client-ts/dist"
+  ],
+  "scripts": {
+    "build": "tsc -b -v ."
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}
